@@ -15,7 +15,7 @@ def get_relevant_maps(allmaps):
             if mymap.gamecount and mymap.gamecount >= 100:
                 map_names.append((mymap.id,mymap.name))
     except:
-        print("Error")
+        print("Error1")
     finally:
         return map_names
 
