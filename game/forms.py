@@ -7,19 +7,20 @@ class CivChoiceField(ModelChoiceField):
     def label_from_instance(self, obj):
         return obj.name
 
-class MatchSearchForm(forms.Form):
-    def get_relevant_maps():
-        map_names = [("All","All Maps")]
-        try:    
-            for mymap in Map.objects.all():
-                if mymap.gamecount and mymap.gamecount >= 100:
-                    map_names.append((mymap.id,mymap.name))
-        except:
-            print("Error")
-        finally:
-            return map_names   
 
-               
+def get_relevant_maps(allmaps):
+    map_names = [("All","All Maps")]
+    try:    
+        for mymap in allmaps:
+            if mymap.gamecount and mymap.gamecount >= 100:
+                map_names.append((mymap.id,mymap.name))
+    except:
+        print("Error")
+    finally:
+        return map_names
+
+
+class MatchSearchForm(forms.Form):      
     elorange = RangeSliderField(minimum=0,
         maximum=3000,
         step = 50,
@@ -45,7 +46,7 @@ class MatchSearchForm(forms.Form):
         required=False, 
         initial=True)
     maps = ChoiceField(widget=forms.Select(attrs={'onchange':'this.form.submit()'}),
-        choices=get_relevant_maps(), 
+        choices=get_relevant_maps(Maps.objects.all()), 
         label= "Map:")
     durationrange = ChoiceField(widget=forms.Select(attrs={'onchange':'this.form.submit()'}),
         choices = [("All","All Durations"),
