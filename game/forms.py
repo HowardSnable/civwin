@@ -46,8 +46,7 @@ class MatchSearchForm(forms.Form):
         required=False, 
         initial=True)
     maps = ChoiceField(widget=forms.Select(attrs={'onchange':'this.form.submit()'}),
-        # choices=get_relevant_maps(Map.objects.all()), 
-        choices = [("All","All Maps")],
+        choices=get_relevant_maps(Map.objects.all()), 
         label= "Map:")
     durationrange = ChoiceField(widget=forms.Select(attrs={'onchange':'this.form.submit()'}),
         choices = [("All","All Durations"),

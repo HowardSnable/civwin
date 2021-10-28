@@ -39,16 +39,17 @@ def checkVersion(match):
             return False
         matchver = int(match.version)
         metadata = MetaData.load()
+        if metadata.version is None or metadata.version < matchver:
+            # (#optimization clean DB)
+            metadata.version = matchver
+            metadata.save()
+            return True
         if metadata.version == matchver:
             return True
         if metadata.version > matchver:
             #dont import old games
             return False
-        if metadata.version < matchver:
-            # (#optimization clean DB)
-            metadata.version = matchver
-            metadata.save()
-            return True
+       
     except Exception as e: 
         # No metadata etc. -> still import
         print(e)
