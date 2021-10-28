@@ -5,7 +5,7 @@ from .forms import MatchSearchForm
 from datetime import datetime, timezone, timedelta
 
 
-def buildGamesQuery(request, inOrder, nGames):
+def gamesQuery(request, inOrder, nGames):
 	
 
 	# filter civs & winner
@@ -46,11 +46,14 @@ def buildGamesQuery(request, inOrder, nGames):
 		games = games.filter(maptype = s_map)
 
 	# filter by elo
-	searchedElo = request.POST['elorange'].replace(" ", "").split(":")[1].split("-")
-	minElo = int(searchedElo[0]) # necessary to filter out noobs like Ridah
-	maxElo = int(searchedElo[1])
-	games = games.filter(avgelo__gte = minElo)
-	games = games.filter(avgelo__lte = maxElo)
+	try:
+		searchedElo = request.POST['elorange'].replace(" ", "").split(":")[1].split("-")
+		minElo = int(searchedElo[0])
+		maxElo = int(searchedElo[1])
+		games = games.filter(avgelo__gte = minElo)
+		games = games.filter(avgelo__lte = maxElo)
+	except:
+		print("No Elo searched")
 
 	# filter by duration
 	searchedDuration = request.POST['durationrange']
@@ -80,8 +83,8 @@ def home_view(request, *args, **kwargs):
 
 	# show results
 	if request.method == "POST":	
-		games = buildGamesQuery(request, True, nGames)
-		games2  = buildGamesQuery(request, False, nGames)
+		games = gamesQuery(request, True, nGames)
+		games2  = gamesQuery(request, False, nGames)
 		context =  {"object_list": games, 
 			"object_list2": games2, 
 			"form": form,  
