@@ -1,0 +1,103 @@
+{% load static %}
+<!doctype html>
+  <html>
+  <head>
+      <title> AoE II Match Finder </title>
+ <link rel="stylesheet"  type="text/css" href="{%  static  "css/style.css"  %}">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<link href="http://code.jquery.com/ui/1.12.0/themes/smoothness/jquery-ui.css" rel="stylesheet">
+<script src="http://code.jquery.com/ui/1.12.0/jquery-ui.min.js" ></script>
+
+  </head>
+
+  <body align="center">
+ 
+<table align="center">
+    <tr>
+      <form method="POST" action={% url 'home' %} id="match_form">
+         {% csrf_token %}
+ {% for field in form.visible_fields %}
+        <th>
+           {% if "winner" in field.label_tag %} <img src="../media/winner.png" width="20" height="20"> {% endif %}
+          {{ field }}
+        </th>
+    {% endfor %}
+    </th>
+
+
+  </tr>
+  
+
+ 
+  <br>
+
+{% for obj in object_list %}
+  <tr>
+     <td>
+      {{ obj.avgelo}}
+    </td>
+    <td>
+      {% if obj.winner == True %} <img src="../media/winner.png" width="20" height="20"> {% endif %} 
+      {{ obj.player1.name}} ({{ obj.player1.rating }})
+      <a href="https://aoe.ms/replay/?gameId={{ obj.match_id }}&profileID={{ obj.player1.player_id }}"><u>↓</u></a> 
+    </td> 
+    <td> 
+      <img src="{{ obj.civ1.icon }}" width="20" height="20"> 
+    </td>
+    <td> 
+      <img src="{{ obj.civ2.icon }}" width="20" height="20"> </td>
+    <td>
+        {{ obj.player2.name}} ({{ obj.player2.rating }})
+        <a href="https://aoe.ms/replay/?gameId={{ obj.match_id }}&profileID={{ obj.player2.player_id }}"><u>↓</u></a> 
+        {% if obj.winner == False %} <img src="../media/winner.png" width="20" height="20"> {% endif %}</td>
+
+     <td>
+        {{ obj.maptype.name}}
+     </td>        
+     <td>
+        {{ obj.duration}}
+     </td>
+   </tr>
+   {% endfor %}
+
+
+{% for obj in object_list2 %}
+  <tr>
+    <td>
+      {{ obj.avgelo}}
+    </td>
+    <td>
+      {% if obj.winner == False %} <img src="../media/winner.png" width="20" height="20"> {% endif %} 
+      {{ obj.player2.name}} ({{ obj.player2.rating }})
+      <a href="https://aoe.ms/replay/?gameId={{ obj.match_id }}&profileID={{ obj.player2.player_id }}"><u>↓</u></a> 
+    </td> 
+    <td> 
+      <img src="{{ obj.civ2.icon }}" width="20" height="20"> 
+    </td>
+    <td> 
+      <img src="{{ obj.civ1.icon }}" width="20" height="20"> </td>
+    <td>
+        {{ obj.player1.name}} ({{ obj.player1.rating }})
+        <a href="https://aoe.ms/replay/?gameId={{ obj.match_id }}&profileID={{ obj.player1.player_id }}"><u>↓</u></a> 
+        {% if obj.winner == True %} <img src="../media/winner.png" width="20" height="20"> {% endif %}</td>
+
+        <td>
+        {{ obj.maptype.name}}
+     </td>
+       <td>
+        {{ obj.duration}}
+     </td>
+   </tr>
+   {% endfor %}
+
+</table>
+
+<br>
+<div class="metadata">
+Patch version: 
+{{ metadata.version }}
+ last updated: 
+ {{  metadata.last_pull }}
+</div>
+  </body>
+</html>
