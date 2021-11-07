@@ -29,6 +29,7 @@ class Command(BaseCommand):
             
         # add timestamp to metadata
         metadata = MetaData.load()
+        metadata.last_pull = datetime.now()
         metadata.save()
 
         return
