@@ -33,7 +33,7 @@ def importCivs(civs):
         if(not Civ.objects.filter(civ_id = newCiv.id)):
             myCiv = Civ()
             myCiv.name = newCiv.string
-            myCiv.icon =  "../media/civs/"+  myCiv.name+".png"
+            myCiv.icon =  "/static/civs/"+  myCiv.name+".png"
             myCiv.civ_id = newCiv.id
             myCiv.save()
 

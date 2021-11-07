@@ -5,9 +5,9 @@
       <title> AoE II Match Finder </title>
  <link rel="stylesheet"  type="text/css" href="{%  static  "css/style.css"  %}">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<link href="http://code.jquery.com/ui/1.12.0/themes/smoothness/jquery-ui.css" rel="stylesheet">
-<script src="http://code.jquery.com/ui/1.12.0/jquery-ui.min.js" ></script>
-
+<link href="https://code.jquery.com/ui/1.12.0/themes/smoothness/jquery-ui.css" rel="stylesheet">
+<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js" ></script>
+<link rel="shortcut icon" type="image/x-icon" href="static/favicon.ico">
   </head>
 
   <body align="center">
@@ -18,7 +18,7 @@
          {% csrf_token %}
  {% for field in form.visible_fields %}
         <th>
-           {% if "winner" in field.label_tag %} <img src="../media/winner.png" width="20" height="20"> {% endif %}
+           {% if "winner" in field.label_tag %} <img src="{% static 'winner.png' %}" width="20" height="20"> {% endif %}
           {{ field }}
         </th>
     {% endfor %}
@@ -37,7 +37,7 @@
       {{ obj.avgelo}}
     </td>
     <td>
-      {% if obj.winner == True %} <img src="../media/winner.png" width="20" height="20"> {% endif %} 
+      {% if obj.winner == True %} <img src="{% static 'winner.png' %}" width="20" height="20"> {% endif %} 
       {{ obj.player1.name}} ({{ obj.player1.rating }})
       <a href="https://aoe.ms/replay/?gameId={{ obj.match_id }}&profileID={{ obj.player1.player_id }}"><u>↓</u></a> 
     </td> 
@@ -49,7 +49,7 @@
     <td>
         {{ obj.player2.name}} ({{ obj.player2.rating }})
         <a href="https://aoe.ms/replay/?gameId={{ obj.match_id }}&profileID={{ obj.player2.player_id }}"><u>↓</u></a> 
-        {% if obj.winner == False %} <img src="../media/winner.png" width="20" height="20"> {% endif %}</td>
+        {% if obj.winner == False %} <img src="{% static 'winner.png' %}" width="20" height="20"> {% endif %}</td>
 
      <td>
         {{ obj.maptype.name}}
@@ -67,7 +67,7 @@
       {{ obj.avgelo}}
     </td>
     <td>
-      {% if obj.winner == False %} <img src="../media/winner.png" width="20" height="20"> {% endif %} 
+      {% if obj.winner == False %} <img src="{% static 'winner.png' %}" width="20" height="20"> {% endif %} 
       {{ obj.player2.name}} ({{ obj.player2.rating }})
       <a href="https://aoe.ms/replay/?gameId={{ obj.match_id }}&profileID={{ obj.player2.player_id }}"><u>↓</u></a> 
     </td> 
@@ -79,7 +79,7 @@
     <td>
         {{ obj.player1.name}} ({{ obj.player1.rating }})
         <a href="https://aoe.ms/replay/?gameId={{ obj.match_id }}&profileID={{ obj.player1.player_id }}"><u>↓</u></a> 
-        {% if obj.winner == True %} <img src="../media/winner.png" width="20" height="20"> {% endif %}</td>
+        {% if obj.winner == True %} <img src="{% static 'winner.png' %}" width="20" height="20"> {% endif %}</td>
 
         <td>
         {{ obj.maptype.name}}

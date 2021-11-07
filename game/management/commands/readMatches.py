@@ -17,8 +17,15 @@ class Command(BaseCommand):
         # import matches and players from other files
         for f in os.listdir(os.path.join(settings.BASE_DIR, "data/matches")):
             print("importing " + f + "...")
-            match_data = json.load(open(os.path.join(settings.BASE_DIR, "data","matches",f), 'r', encoding="utf-8"), object_hook=lambda d: SimpleNamespace(**d))
-            importMatches(match_data)           
+            fpath = os.path.join(settings.BASE_DIR, "data","matches",f)
+            try:
+                match_data = json.load(open(fpath, 'r', encoding="utf-8"),
+                     object_hook=lambda d: SimpleNamespace(**d))
+                importMatches(match_data) 
+                os.remove(fpath)
+            except Exception as e:
+                    print ("Could not read" + f + "with error" + str(e))
+                      
             
         # add timestamp to metadata
         metadata = MetaData.load()

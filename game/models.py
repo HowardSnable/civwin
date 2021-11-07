@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import datetime
 
 class SingletonModel(models.Model):
     class Meta:
@@ -17,7 +18,7 @@ class SingletonModel(models.Model):
 
 class MetaData(SingletonModel):
 	version = models.IntegerField()
-	last_pull = models.DateTimeField(auto_now_add=True)
+	last_pull = models.DateTimeField(default = datetime.now())
 	support_mail = models.EmailField(blank= True, null=True)
 
 class Civ(models.Model):
