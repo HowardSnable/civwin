@@ -14,9 +14,7 @@
 <body align="center">
 
 <table align="center">
-    <!-- todo: I do not get, what the first tr is supposed to do-->
     <tr>
-        <!-- todo: here is some issue, the form tag has no/wrong closing tag -->
         <form method="POST" action="{% url 'home' %}" id="match_form">
         {% csrf_token %}
         {% for field in form.visible_fields %}
@@ -25,8 +23,8 @@
             {{ field }}
         </th>
         {% endfor %}
-        </th> <!-- todo: I guess this should be the closing tag of form? -->
-
+        </th> 
+      </form>
 
     </tr>
 

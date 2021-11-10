@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parents[1].resolve()
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1','raikosef.uber.space']
 
@@ -127,7 +127,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = str(BASE_DIR / 'static')
 STATICFILES_DIRS = [
-    str(BASE_DIR / 'static' / 'css')    # todo: I guess you could drop it, you probably just need STATIC_ROOT
+    str(BASE_DIR / 'static' / 'css')
 ]
 
 # Default primary key field type
