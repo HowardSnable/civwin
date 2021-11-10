@@ -1,103 +1,108 @@
 {% load static %}
 <!doctype html>
-  <html>
-  <head>
-      <title> AoE II Match Finder </title>
- <link rel="stylesheet"  type="text/css" href="{%  static  "css/style.css"  %}">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<link href="https://code.jquery.com/ui/1.12.0/themes/smoothness/jquery-ui.css" rel="stylesheet">
-<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js" ></script>
-<link rel="shortcut icon" type="image/x-icon" href="static/favicon.ico">
-  </head>
+<html>
+<head>
+    <title> AoE II Match Finder </title>
+    <link rel="stylesheet" type="text/css" href="{%  static 'css/style.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <link href="https://code.jquery.com/ui/1.12.0/themes/smoothness/jquery-ui.css" rel="stylesheet">
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+    <!-- todo: use the static url for the favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="static/favicon.ico">
+</head>
 
-  <body align="center">
- 
+<body align="center">
+
 <table align="center">
+    <!-- todo: I do not get, what the first tr is supposed to do-->
     <tr>
-      <form method="POST" action={% url 'home' %} id="match_form">
-         {% csrf_token %}
- {% for field in form.visible_fields %}
+        <!-- todo: here is some issue, the form tag has no/wrong closing tag -->
+        <form method="POST" action="{% url 'home' %}" id="match_form">
+        {% csrf_token %}
+        {% for field in form.visible_fields %}
         <th>
-           {% if "winner" in field.label_tag %} <img src="{% static 'winner.png' %}" width="20" height="20"> {% endif %}
-          {{ field }}
+            {% if "winner" in field.label_tag %}<img src="{% static 'winner.png' %}" width="20" height="20">{% endif %}
+            {{ field }}
         </th>
-    {% endfor %}
-    </th>
+        {% endfor %}
+        </th> <!-- todo: I guess this should be the closing tag of form? -->
 
 
-  </tr>
-  
-
- 
-  <br>
-
-{% for obj in object_list %}
-  <tr>
-     <td>
-      {{ obj.avgelo}}
-    </td>
-    <td>
-      {% if obj.winner == True %} <img src="{% static 'winner.png' %}" width="20" height="20"> {% endif %} 
-      {{ obj.player1.name}} ({{ obj.player1.rating }})
-      <a href="https://aoe.ms/replay/?gameId={{ obj.match_id }}&profileID={{ obj.player1.player_id }}"><u>↓</u></a> 
-    </td> 
-    <td> 
-      <img src="{{ obj.civ1.icon }}" width="20" height="20"> 
-    </td>
-    <td> 
-      <img src="{{ obj.civ2.icon }}" width="20" height="20"> </td>
-    <td>
-        {{ obj.player2.name}} ({{ obj.player2.rating }})
-        <a href="https://aoe.ms/replay/?gameId={{ obj.match_id }}&profileID={{ obj.player2.player_id }}"><u>↓</u></a> 
-        {% if obj.winner == False %} <img src="{% static 'winner.png' %}" width="20" height="20"> {% endif %}</td>
-
-     <td>
-        {{ obj.maptype.name}}
-     </td>        
-     <td>
-        {{ obj.duration}}
-     </td>
-   </tr>
-   {% endfor %}
+    </tr>
 
 
-{% for obj in object_list2 %}
-  <tr>
-    <td>
-      {{ obj.avgelo}}
-    </td>
-    <td>
-      {% if obj.winner == False %} <img src="{% static 'winner.png' %}" width="20" height="20"> {% endif %} 
-      {{ obj.player2.name}} ({{ obj.player2.rating }})
-      <a href="https://aoe.ms/replay/?gameId={{ obj.match_id }}&profileID={{ obj.player2.player_id }}"><u>↓</u></a> 
-    </td> 
-    <td> 
-      <img src="{{ obj.civ2.icon }}" width="20" height="20"> 
-    </td>
-    <td> 
-      <img src="{{ obj.civ1.icon }}" width="20" height="20"> </td>
-    <td>
-        {{ obj.player1.name}} ({{ obj.player1.rating }})
-        <a href="https://aoe.ms/replay/?gameId={{ obj.match_id }}&profileID={{ obj.player1.player_id }}"><u>↓</u></a> 
-        {% if obj.winner == True %} <img src="{% static 'winner.png' %}" width="20" height="20"> {% endif %}</td>
+    <br>
+
+    {% for obj in object_list %}
+    <tr>
+        <td>
+            {{ obj.avgelo }}
+        </td>
+        <td>
+            {% if obj.winner == True %} <img src="{% static 'winner.png' %}" width="20" height="20"> {% endif %}
+            {{ obj.player1.name}} ({{ obj.player1.rating }})
+            <a href="https://aoe.ms/replay/?gameId={{ obj.match_id }}&profileID={{ obj.player1.player_id }}"><u>↓</u></a>
+        </td>
+        <td>
+            <img src="{{ obj.civ1.icon }}" width="20" height="20">
+        </td>
+        <td>
+            <img src="{{ obj.civ2.icon }}" width="20" height="20"></td>
+        <td>
+            {{ obj.player2.name}} ({{ obj.player2.rating }})
+            <a href="https://aoe.ms/replay/?gameId={{ obj.match_id }}&profileID={{ obj.player2.player_id }}"><u>↓</u></a>
+            {% if obj.winner == False %} <img src="{% static 'winner.png' %}" width="20" height="20"> {% endif %}
+        </td>
 
         <td>
-        {{ obj.maptype.name}}
-     </td>
-       <td>
-        {{ obj.duration}}
-     </td>
-   </tr>
-   {% endfor %}
+            {{ obj.maptype.name}}
+        </td>
+        <td>
+            {{ obj.duration}}
+        </td>
+    </tr>
+    {% endfor %}
+
+
+    {% for obj in object_list2 %}
+    <tr>
+        <td>
+            {{ obj.avgelo}}
+        </td>
+        <td>
+            {% if obj.winner == False %} <img src="{% static 'winner.png' %}" width="20" height="20"> {% endif %}
+            {{ obj.player2.name}} ({{ obj.player2.rating }})
+            <a href="https://aoe.ms/replay/?gameId={{ obj.match_id }}&profileID={{ obj.player2.player_id }}"><u>↓</u></a>
+        </td>
+        <td>
+            <img src="{{ obj.civ2.icon }}" width="20" height="20">
+        </td>
+        <td>
+            <img src="{{ obj.civ1.icon }}" width="20" height="20"></td>
+        <td>
+            {{ obj.player1.name}} ({{ obj.player1.rating }})
+            <a href="https://aoe.ms/replay/?gameId={{ obj.match_id }}&profileID={{ obj.player1.player_id }}"><u>↓</u></a>
+            {% if obj.winner == True %} <img src="{% static 'winner.png' %}" width="20" height="20"> {% endif %}
+        </td>
+
+        <td>
+            {{ obj.maptype.name}}
+        </td>
+        <td>
+            {{ obj.duration}}
+        </td>
+    </tr>
+    {% endfor %}
 
 </table>
 
 <br>
+<!-- todo: put this div into the footer -->
 <div class="metadata">
-Patch version: 
-{{ metadata.version }}
- last updated: 
- {{  metadata.last_pull }} UTC
+    Patch version:
+    {{ metadata.version }}
+    last updated:
+    {{ metadata.last_pull }} UTC
 </div>
-  </body>
+</body>
 </html>

@@ -2,6 +2,9 @@ __pycache__
 *.py[cod]
 *$py.class
 
+# todo: put the sublime specific stuff into the gitignore
+# todo: for the long run you might consider using pycharm oder vscode as an ide instead
+
 # Distribution / packaging 
 .Python build/ 
 develop-eggs/ 
@@ -66,18 +69,7 @@ venv/
 ENV/
 
 # If you are using PyCharm # 
-.idea/**/workspace.xml 
-.idea/**/tasks.xml 
-.idea/dictionaries 
-.idea/**/dataSources/ 
-.idea/**/dataSources.ids 
-.idea/**/dataSources.xml 
-.idea/**/dataSources.local.xml 
-.idea/**/sqlDataSources.xml 
-.idea/**/dynamic.xml 
-.idea/**/uiDesigner.xml 
-.idea/**/gradle.xml 
-.idea/**/libraries 
+.idea
 *.iws /out/ 
 
 # Sublime Text
