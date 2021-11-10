@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from django.db import models
-
+from django.core.exceptions import ObjectDoesNotExist
 
 class SingletonModel(models.Model):
     class Meta:
@@ -15,7 +15,7 @@ class SingletonModel(models.Model):
     def load(cls):
         try:
             return cls.objects.get()
-        except cls.DoesNotExist:        # todo: does this work?
+        except ObjectDoesNotExist: 
             return cls()
 
 
@@ -65,6 +65,3 @@ class Game(models.Model):
     duration = models.DurationField()
     avgelo = models.IntegerField()
     version = models.IntegerField()
-
-    def getRating():    # todo: there is no self, should not work
-        return (player1.rating + player2.rating) / 2

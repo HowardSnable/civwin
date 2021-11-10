@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelChoiceField, ChoiceField
-
+import logging
 from .fields import RangeSliderField
 from .models import Map, Civ
 
@@ -17,7 +17,7 @@ def get_relevant_maps(allmaps):
             if mymap.gamecount and mymap.gamecount >= 100:
                 map_names.append((mymap.id, mymap.name))
     except:
-        print("Error1")     # todo: in the long run try to use logging instead of print statements
+        logger.error("could not get relevant maps") 
     finally:
         return map_names
 
