@@ -1,40 +1,67 @@
 import getopt
 import json
-import os.path      # pathlib gives you an easier time and better to use one tools for path operations than two
-import ssl
+import os.path
 import sys
 import urllib.request
 from datetime import datetime, timedelta
 from pathlib import Path
 from types import SimpleNamespace
 
-ssl._create_default_https_context = ssl._create_unverified_context      # todo: this looks suspicious (is this needed?)
+
+def fetch_hours(n_per_hour: int, matchpath: str):
+    time_now = datetime.now()
+
+    for i in range(24 * n_per_hour):
+        print(f"loading for time {i + 1} of {24 * n_per_hour} ...")
+        time_i = time_now - timedelta(hours=i / n_per_hour + 1)
+        url = "https://aoe2.net/api/matches?game=aoe2de&count=1000&since=" + str(round(time_i.timestamp()))
+        r = urllib.request.urlopen(url)
+        with open(f"{matchpath}matches{i}.json", 'wb') as f:
+            f.write(r.read())
+
+
+def fetch_leaderboard(n_players: str, datapath: str):
+    # save leaderboard
+    url = "https://aoe2.net/api/leaderboard?game=aoe2de&leaderboard_id=3&start=1&count=" + n_players
+    r = urllib.request.urlopen(url)
+    with open(datapath + "leaderboard.json", 'wb') as f:
+        f.write(r.read())
+
+
+def fetch_tops(n_games: str, datapath: str, matchpath: str):
+    # iterate through players and save files
+    leaderboard_data = json.load(open(datapath + "leaderboard.json", 'r', encoding='utf8'),
+                                 object_hook=lambda d: SimpleNamespace(**d))
+    for i in range(len(leaderboard_data.leaderboard)):
+        print("loading for player " + str(i + 1) + " of " + str(len(leaderboard_data.leaderboard)) + "...")
+        player = leaderboard_data.leaderboard[i]
+        url = "https://aoe2.net/api/player/matches?game=aoe2de&steam_id=" + player.steam_id + "&count=" + n_games
+        r = urllib.request.urlopen(url)
+        with open(matchpath + "top_matches" + "%s" % i + ".json", 'wb') as f:
+            f.write(r.read())
+
 
 BASE_DIR = Path(__file__).resolve().parents[1]
-datapath = os.path.join(BASE_DIR, "data/")
-matchpath = os.path.join(datapath, "matches/")
-perHour = 2
-nTopPlayers = 300
-nGamesperPlayer = 50
-# todo: consider using snake case names instead of camel case names for variables, functions, methods etc.
+data_path = os.path.join(BASE_DIR, "data/")
+match_path = os.path.join(data_path, "matches/")
+per_hour = 2
+top_players = "300"
+games_per_player = "50"
 
 options = "h:p:g:d"
 long_options = ["perHour=", "players=", "games=", "delete"]
 try:
-    # todo: consider using argparse instead
     arguments, values = getopt.getopt(sys.argv[1:], options, long_options)
     # checking each argument
     for currentArgument, currentValue in arguments:
         if currentArgument in ("-h", "--perHour"):
-            perHour = int(currentValue)
+            per_hour = int(currentValue)
         elif currentArgument in ("-p", "--players"):
-            nTopPlayers = int(currentValue)
-            # todo: not really required to cast to int right, because you convert it back to str later on
+            top_players = currentValue
         elif currentArgument in ("-g", "--games"):
-            nGamesperPlayer = int(currentValue)
-            # same as above
+            games_per_player = currentValue
         elif currentArgument in ("-d", "--delte"):
-            # delte old files todo: guess this should mean 'delete'?
+            # delete old files
             for root, dirs, files in os.walk(matchpath):
                 for file in files:
                     os.remove(os.path.join(root, file))
@@ -42,35 +69,6 @@ try:
 except getopt.GetoptError:
     pass
 
-#####################
-# get "all" games
-time_now = datetime.now()
-
-for i in range(24 * perHour):
-    print(f"loading for time {i + 1} of {24 * perHour} ...")
-    time_i = time_now - timedelta(hours=i / perHour + 1)
-    url = "https://aoe2.net/api/matches?game=aoe2de&count=1000&since=" + str(round(time_i.timestamp()))
-    r = urllib.request.urlopen(url)
-    with open(f"{matchpath}matches{i}.json", 'wb') as f:
-        f.write(r.read())
-
-    ###################
-# get last games from top players
-
-# save leaderboard
-url = "https://aoe2.net/api/leaderboard?game=aoe2de&leaderboard_id=3&start=1&count=" + str(nTopPlayers)
-r = urllib.request.urlopen(url)
-with open(datapath + "leaderboard.json", 'wb') as f:
-    f.write(r.read())
-
-# iterate through players and save files
-leaderboardData = json.load(open(datapath + "leaderboard.json", 'r', encoding='utf8'),
-                            object_hook=lambda d: SimpleNamespace(**d))
-for i in range(len(leaderboardData.leaderboard)):
-    print("loading for player " + str(i + 1) + " of " + str(len(leaderboardData.leaderboard)) + "...")
-    player = leaderboardData.leaderboard[i]
-    url = "https://aoe2.net/api/player/matches?game=aoe2de&steam_id=" + player.steam_id + "&count=" + str(
-        nGamesperPlayer)
-    r = urllib.request.urlopen(url)
-    with open(matchpath + "top_matches" + "%s" % i + ".json", 'wb') as f:
-        f.write(r.read())
+fetch_hours(per_hour, match_path)
+fetch_leaderboard(top_players, data_path)
+fetch_tops(games_per_player, data_path, match_path)

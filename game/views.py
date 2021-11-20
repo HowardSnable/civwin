@@ -6,7 +6,7 @@ from .forms import MatchSearchForm
 from .models import Game, Map, MetaData
 
 
-def gamesQuery(request, inOrder, nGames):
+def games_query(request, inOrder, nGames):
     # filter civs & winner
     if inOrder:
         searched1 = request.POST['civs1']
@@ -76,8 +76,8 @@ def home_view(request, *args, **kwargs):
 
     # show results
     if request.method == "POST":
-        games = gamesQuery(request, True, nGames)
-        games2 = gamesQuery(request, False, nGames)
+        games = games_query(request, True, nGames)
+        games2 = games_query(request, False, nGames)
         context = {"object_list": games,
                    "object_list2": games2,
                    "form": form,

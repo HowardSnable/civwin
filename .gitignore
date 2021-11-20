@@ -3,11 +3,6 @@ __pycache__
 *$py.class
 .pyc
 
-
-
-# todo: put the sublime specific stuff into the gitignore
-# todo: for the long run you might consider using pycharm oder vscode as an ide instead
-
 # Distribution / packaging 
 .Python build/ 
 develop-eggs/ 

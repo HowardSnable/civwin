@@ -16,33 +16,31 @@ class Command(BaseCommand):
                               object_hook=lambda d: SimpleNamespace(**d))
 
         # import civs
-        importCivs(base_data.civ)
+        import_civs(base_data.civ)
 
         # import maps
-        importMaps(base_data.map_type)
+        import_maps(base_data.map_type)
 
         return
 
 
-def importCivs(civs):
+def import_civs(civs):
     for newCiv in civs:
         # only import if not yet in DB
-        if (not Civ.objects.filter(civ_id=newCiv.id)):
-            myCiv = Civ()
-            myCiv.name = newCiv.string
-            myCiv.icon = "/static/civs/" + myCiv.name + ".png"
-            # todo: use djangos static url logic and drop /static
-            # todo: move the game/static folder to /static or /run/static
-            myCiv.civ_id = newCiv.id
-            myCiv.save()
+        if not Civ.objects.filter(civ_id=newCiv.id):
+            my_civ = Civ()
+            my_civ.name = newCiv.string
+            my_civ.icon = f"{{% static 'civs/' %}} {my_civ.name}.png"
+            my_civ.civ_id = newCiv.id
+            my_civ.save()
 
 
-def importMaps(maps):
+def import_maps(maps):
     for newMap in maps:
         # only import if not yet in DB
-        if (not Map.objects.filter(map_id=newMap.id)):
-            myMap = Map()
-            myMap.name = newMap.string
-            myMap.map_id = newMap.id
-            myMap.game_count = 0
-            myMap.save()
+        if not Map.objects.filter(map_id=newMap.id):
+            my_map = Map()
+            my_map.name = newMap.string
+            my_map.map_id = newMap.id
+            my_map.game_count = 0
+            my_map.save()
